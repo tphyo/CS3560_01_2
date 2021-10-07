@@ -192,7 +192,7 @@ const data = {
             calorie: 130,
             price: 1,
             image: '/images/drpepper.jpg',
-        },
+        }, 
     ]
 };
 
