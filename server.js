@@ -21,32 +21,38 @@ const Product = mongoose.model(
     'products', 
     new mongoose.Schema({
         name: String,
-        description: String,
         image: String,
         price: Number,
         calorie: Number,
         category: String,
-
+        ingredient: { type: String, default: 'N/A'},
+        healthNotes: { type: String, default: 'N/A'},
+        prepTime: Number,
+        inStock: { type: Boolean, default: true}
     })
 );
 
+// Seed menu
 app.get('/api/products/seed', async (req,res) => {
-    const products = await Product.insertMany (data.products);
+    const products = await Product.insertMany(data.products);
     res.send({products});
 })
 
+// Get menu list
 app.get('/api/products', async (req,res) => {
     const { category } = req.query;
     const products = await Product.find(category ? { category } : {});
     res.send(products);
 });
 
+// Add item to menu list
 app.post('/api/products', async (req, res) => {
     const newProduct = new Product(req.body);
     const savedProduct = await newProduct.save();
     res.send(savedProduct);
 });
 
+// Get categories
 app.get('/api/categories', (req, res)=> {
     res.send(data.categories);
 });
@@ -119,8 +125,12 @@ app.put('/api/orders/:id', async (req, res) => {
     }
 })
 
-const port = process.env.PORT || 5000;
 
+app.get('/', (req, res) => {
+    res.send('Hello World!')
+});
+
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Serve running at http://localhost:${port}`);
 });

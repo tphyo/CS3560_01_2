@@ -9,10 +9,10 @@ developments may lead to the creation of an app or a website.
 4. Testing: Perform all system-level tests and then deploy the solution. (16 hours)
 
 ### Prerequisites
-Members have to be familiar with JavaScript, NodeJS, React, MongoDB,...
+Members have to be familiar with JavaScript, NodeJS, ReactJS, MongoDB,...
 
 ### System capabilities:
-* Display menus (food/ drink/ dessert)
+* Display menus (Starters, Entrees, Side Orders, Beverages)
 * Display food information (ingredients, calories, health notes, prep time)
 * Add items to orders
 * Accept different payment types
@@ -25,8 +25,8 @@ Members have to be familiar with JavaScript, NodeJS, React, MongoDB,...
 cooking the order.
 
 ## Built With
-* Android Studio
-* React
+* NodeJS (Express)
+* ReactJS
 * MongoDB
 
 ## Contributors
