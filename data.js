@@ -1,86 +1,127 @@
 const data = {
-    categories: [
+    categories: [ // The Menu Categories include: Starters, Entrees, Side Orders, Beverages
+        {
+            name: 'Starters', 
+            image: '/images/starters.jpg'
+        },
+        {
+            name: 'Entrees', 
+            image: '/images/entrees.jpg'
+        },
+        {
+            name: 'Side Orders', 
+            image: '/images/side_orders.jpg'
+        },
         {
             name: 'Beverages', 
             image: '/images/beverages.jpg'
         },
-        {
-            name: 'Starter', 
-            image: '/images/breakfast.jpg'
-        },
-        {
-            name: 'Entrees', 
-            image: '/images/burgers.jpg'
-        },
-        {
-            name: 'Side Orders', 
-            image: '/images/burgers.jpg'
-        },
     ],
-    products: [
+    products: [ // Menu Items are listed here
+        
+        // STARTERS ITEMS
         {
-            category: 'Beverages',
-            name: 'Coca-Cola',
+            category: 'Starter',
+            name: 'Fam\'s Salad',
+            price: 8,
             calorie: 120,
-            price: 1,
-            image: '/images/t-mcdonalds-Coca-Cola-Classic-Small.jpg',
-        },
-        {
-            category: 'Beverages',
-            name: 'Vanill Shake',
-            price: 1.5,
-            calorie: 360,
-            image: '/images/t-mcdonalds-Vanilla-McCafe-Shake-Medium.jpg',
-        },
-        {
-            category: 'Beverages',
-            name: 'Hot Chocolate',
-            price: 2,
-            calorie: 170,
-            image: '/images/t-mcdonalds-McCafe-Hot-Chocolate-Medium.jpg',
+            image:'/images/fam_salad.jpg',
         },
         {
             category: 'Starter',
-            name: 'Bacon Egg & Biscuit Sandwich',
-            price: 2.9,
+            name: 'Spicy Shrim \& Pork Wonton',
+            price: 10,
             calorie: 120,
-            image:
-                '/images/t-mcdonalds-Bacon-Egg-Cheese-Biscuit-Regular-Size-Biscuit.jpg',
+            image:'/images/wonton.jpg',
         },
         {
             category: 'Starter',
-            name: 'Wild Blueberry Muffin',
-            price: 1.5,
+            name: 'Popcorn Chicken',
+            price: 7,
             calorie: 120,
-            image: '/images/t-blueberry-muffin.jpg',
+            image:'/images/popcorn_chicken.jpg',
         },
         {
             category: 'Starter',
-            name: 'Americas's Breakfast',
-            price: 4.5,
-            calorie: 430,
-            image: '/images/s-mcdonalds-Big-Breakfast-Regular-Size-Biscuit.jpg',
+            name: 'Skinny Crispy Fries',
+            price: 7,
+            calorie: 120,
+            image:'/images/fries.jpg',
         },
         {
-            category: 'Burgers',
-            name: 'Big Mac',
-            price: 1.9,
-            calorie: 200,
-            image: '/images/t-mcdonalds-Big-Mac.jpg',
+            category: 'Starter',
+            name: 'Chicken Wings',
+            price: 11,
+            calorie: 120,
+            image:'/images/chicken_wings.jpg',
         },
         {
-            category: 'Burgers',
-            name: 'Hamburger',
+            category: 'Starter',
+            name: 'Corn Cheese',
+            price: 7.5,
+            calorie: 120,
+            image:'/images/corn_cheese.jpg',
+        },
+        {
+            category: 'Starter',
+            name: 'Spicy Noodle',
+            price: 6,
+            calorie: 120,
+            image:'/images/spicy_noodle.jpg',
+        },
+        
+        // ENTREES ITEMS
+        {
+            category: 'Entrees',
+            name: 'Fam Combo',
+            calorie: 120,
+            price: 15,
+            image: '/images/fam_combo.jpg',
+        },
+        {
+            category: 'Entrees',
+            name: 'Fried Rice',
+            calorie: 120,
+            price: 14,
+            image: '/images/fried_rice.jpg',
+        },
+        {
+            category: 'Entrees',
+            name: 'House Garlic Noodles',
+            calorie: 120,
+            price: 15,
+            image: '/images/house_garlic_noodles.jpg',
+        },
+        {
+            category: 'Entrees',
+            name: 'Stone Bowl Soup',
+            calorie: 120,
+            price: 15,
+            image: '/images/stone_bowl_soup.jpg',
+        },
+        {
+            category: 'Entrees',
+            name: 'Saltado Shaken Fries',
+            calorie: 120,
+            price: 18,
+            image: '/images/saltado_shaken_fries.jpg',
+        },
+        
+        // SIDE ORDERS
+        {
+            category: 'Side Orders',
+            name: 'Steam rice',
+            calorie: 120,
             price: 1.5,
-            calorie: 410,
-            image: '/images/t-mcdonalds-Hamburger.jpg',
-        },
+        },        
+        
+        // BEVERAGES
         {
-            category: 'Burgers',
-            name: 'McDouble',
-            price: 3,
-            calorie: 320,
-            image: '/images/t-mcdonalds-McDouble.jpg',
+            category: 'Beverages',
+            name: 'Vietnamese Coffee',
+            calorie: 120,
+            price: 4,
+            image: '/images/coffee.jpg',
         },
     ]
 };
