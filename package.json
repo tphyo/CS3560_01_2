@@ -1,0 +1,26 @@
+{
+  "name": "food_ordering",
+  "version": "0.1.0",
+  "description": "food_ordering",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.6"
+  },
+  "scripts": {
+    "server": "nodemon --watch server.js --exec node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tphyo/CS3560_01_2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tphyo/CS3560_01_2/issues"
+  },
+  "homepage": "https://github.com/tphyo/CS3560_01_2#readme"
+}
