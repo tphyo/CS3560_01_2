@@ -26,7 +26,6 @@ const Product = mongoose.model(
         price: Number,
         calorie: Number,
         category: String,
-        
 
     })
 );
