@@ -5,11 +5,15 @@ const data = {
             image: '/images/beverages.jpg'
         },
         {
-            name: 'Breakfast', 
+            name: 'Starter', 
             image: '/images/breakfast.jpg'
         },
         {
-            name: 'Burgers', 
+            name: 'Entrees', 
+            image: '/images/burgers.jpg'
+        },
+        {
+            name: 'Side Orders', 
             image: '/images/burgers.jpg'
         },
     ],
@@ -36,24 +40,24 @@ const data = {
             image: '/images/t-mcdonalds-McCafe-Hot-Chocolate-Medium.jpg',
         },
         {
-            category: 'Breakfast',
-            name: 'Bacon & Biscuit',
-            price: 1.9,
-            calorie: 90,
+            category: 'Starter',
+            name: 'Bacon Egg & Biscuit Sandwich',
+            price: 2.9,
+            calorie: 120,
             image:
                 '/images/t-mcdonalds-Bacon-Egg-Cheese-Biscuit-Regular-Size-Biscuit.jpg',
         },
         {
-            category: 'Breakfast',
-            name: 'Blueberry Muffin',
+            category: 'Starter',
+            name: 'Wild Blueberry Muffin',
             price: 1.5,
             calorie: 120,
             image: '/images/t-blueberry-muffin.jpg',
         },
         {
-            category: 'Breakfast',
-            name: 'Big Breakfast',
-            price: 3,
+            category: 'Starter',
+            name: 'Americas's Breakfast',
+            price: 4.5,
             calorie: 430,
             image: '/images/s-mcdonalds-Big-Breakfast-Regular-Size-Biscuit.jpg',
         },
