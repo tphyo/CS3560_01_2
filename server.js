@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const data = require('./data');
 
-const app = express();
-
+const app = express(); // Start express app
 app.use(express.json());
 app.use(express.urlencoded({ extends:true }));
 
 dotenv.config ();
 
+// Connect to the MongoDB database
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
 
 
-// Order Product
+// Product Schema (food items schema)
 const Product = mongoose.model(
     'products', 
     new mongoose.Schema({
@@ -32,7 +32,7 @@ const Product = mongoose.model(
     })
 );
 
-// Seed menu
+// Seed menu from data.js
 app.get('/api/products/seed', async (req,res) => {
     const products = await Product.insertMany(data.products);
     res.send({products});
@@ -57,7 +57,7 @@ app.get('/api/categories', (req, res)=> {
     res.send(data.categories);
 });
 
-// Order Model
+// Order Schema
 const Order = mongoose.model('order', new mongoose.Schema (
     {
         number: { type: Number, default: 0},
@@ -83,11 +83,13 @@ const Order = mongoose.model('order', new mongoose.Schema (
     )
 );
 
+// Get all orders are in the process
 app.get('/api/orders', async (req, res) => {
     const orders = await Order.find({isDelivered: false, isCanceled: false})
     res.send(orders);
 })
 
+// Add a new order
 app.post('/api/orders', async (req, res) => {
     const lastOrder = await Order.find().sort({ number: -1 }).limit(1);
     const lastNumber = lastOrder.length === 0  ? 0 : lastOrder[0].number;
@@ -103,6 +105,7 @@ app.post('/api/orders', async (req, res) => {
     res.send(order);
 });
 
+// Edit order status
 app.put('/api/orders/:id', async (req, res) => {
     const order = await Order.findById(req.params.id);
     if (order) {
@@ -125,12 +128,13 @@ app.put('/api/orders/:id', async (req, res) => {
     }
 })
 
-
+// Root URL
 app.get('/', (req, res) => {
     res.send('Hello World!')
 });
 
+// Run server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    console.log(`Serve running at http://localhost:${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
