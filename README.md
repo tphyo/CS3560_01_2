@@ -27,7 +27,7 @@ cooking the order.
 ## Built With
 * NodeJS (Express)
 * ReactJS
-* MongoDB
+* SQLite3
 
 ## Contributors
 * Thet Hlaing Phyo - tphyo@cpp.edu
