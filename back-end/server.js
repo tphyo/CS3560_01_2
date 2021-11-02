@@ -27,7 +27,59 @@ function timestamp() {
 
 // Creat database and tables
 const db = new sqlite3.Database('./kiosk.db', (err) => {
-    
+    if (err) { // If there's an error opening the database, display an error message
+        console.error("Error opening database " + err.message);
+    } else { 
+        // else, create tables for foodItems, orders, orderItems if not existed
+        db.run('CREATE TABLE IF NOT EXISTS foodItems( \
+            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\
+            name NVARCHAR(50) NOT NULL,\
+            image NVARCHAR(50) NOT NULL,\
+            price FLOAT NOT NULL,\
+            calories INTERGER,\
+            category NVARCHAR(10),\
+            ingredient NVARCHAR(100),\
+            healthNotes NVARCHAR(50),\
+            prepTime INTERGER,\
+            inStock INTERGER(1)\
+        )', (err) => {
+            if (err) {
+                console.log("Cannot create table foodItems. Because of" + err);
+            }
+        });
+
+        db.run('CREATE TABLE IF NOT EXISTS orders( \
+            number INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\
+            orderType NVARCHAR(10) NOT NULL,\
+            paymentType NVARCHAR(50) NOT NULL,\
+            isPaid INTEGER(1) NOT NULL,\
+            isReady INTEGER(1) NOT NULL,\
+            isProgress INTEGER(1) NOT NULL,\
+            isCanceled INTEGER(1) NOT NULL,\
+            isDelivered INTEGER(1) NOT NULL,\
+            taxPrice FLOAT,\
+            totalPrice FLOAT,\
+            createdAt DATETIME,\
+            updatedAt DATETIME\
+        )', (err) => {
+            if (err) {
+                console.log("Cannot create table orders. Because of" + err);
+            }
+        });
+
+        db.run('CREATE TABLE IF NOT EXISTS orderItems( \
+            orderID INTEGER NOT NULL,\
+            itemID INTEGER NOT NULL,\
+            quantity INTERGER NOT NULL,\
+            CONSTRAINT orderItemsPK PRIMARY KEY (orderID, itemID),\
+            CONSTRAINT orderItemsFK_order FOREIGN KEY (orderID) REFERENCES orders(number) ON UPDATE CASCADE ON DELETE CASCADE,\
+            CONSTRAINT orderItemsFK_item FOREIGN KEY (itemID) REFERENCES foodItems(id) ON UPDATE CASCADE ON DELETE CASCADE\
+        )', (err) => {
+            if (err) {
+                console.log("Cannot create table orders. Because of" + err);
+            }
+        });
+    }
 });
 
 // GET categories
