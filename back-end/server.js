@@ -114,7 +114,48 @@ app.post("/api/orders", (req, res, next) => {
 
 // UPDATE order status
 app.put("/api/orders/:id", (req, res, next) => {
-    
+    var currentTime = timestamp();
+    var action = req.body.action;
+    if (action === "ready") {
+        let update = 'UPDATE orders SET isReady = 1, isProgress = 0, updatedAt = ? WHERE number = ?';
+        db.run(update, [currentTime, req.params.id], function(err, result) {
+            if (err){
+                res.status(400).json({"error": err.message})
+                return;
+            }
+            res.json({
+                "message": "success",
+                "action": action,
+                "orderNumber": req.params.id
+            })
+        });
+    } else if (action === "deliver") {
+        let update = 'UPDATE orders SET isDelivered = 1, isPaid = 1, isProgress = 0, updatedAt = ? WHERE number = ?';
+        db.run(update, [currentTime, req.params.id], function(err, result) {
+            if (err){
+                res.status(400).json({"error": err.message})
+                return;
+            }
+            res.json({
+                "message": "success",
+                "action": action,
+                "orderNumber": req.params.id
+            })
+        });
+    } else if (action === "cancel"){
+        let update = 'UPDATE orders SET isCanceled = 1, isProgress = 0, updatedAt = ? WHERE number = ?';
+        db.run(update, [currentTime, req.params.id], function(err, result) {
+            if (err){
+                res.status(400).json({"error": err.message})
+                return;
+            }
+            res.json({
+                "message": "success",
+                "action": action,
+                "orderNumber": req.params.id
+            })
+        });
+    }
 });
 
 
