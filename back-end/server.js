@@ -89,12 +89,36 @@ app.get('/api/categories', (req, res)=> {
 
 // Seed foodItems from data.js
 app.post("/api/products/seed", (req, res, next) => {
-
+    let insert = 'INSERT INTO foodItems (name, image, price, calories, category, ingredient, healthNotes, prepTime, inStock) VALUES (?,?,?,?,?,?,?,?,?)';
+    data.products.forEach(
+        item => {
+            db.run(insert, [item.name, item.image, item.price, item.calorie, item.category, item.ingredient, item.healthNotes, item.prepTime, item.inStock]);
+        }
+    );
+    res.json({
+        "message": "success",
+    })
 });
 
 // GET all foodItems or by category
 app.get("/api/products", (req, res, next) => {
-
+    const params = req.query;
+    if (!isEmpty(params.category)) // by category
+        db.all(`SELECT * FROM foodItems where category=?`, [params.category], (err, rows) => {
+            if (err) {
+            res.status(400).json({"error":err.message});
+            return;
+            }
+            res.status(200).json(rows);
+        });
+    else    // get all foodItems
+        db.all(`SELECT * FROM foodItems`, [], (err, rows) => {
+            if (err) {
+            res.status(400).json({"error":err.message});
+            return;
+            }
+            res.status(200).send(rows);
+        });
 });
 
 // POST a new Food Item
