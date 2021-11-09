@@ -133,7 +133,47 @@ app.get("/api/orders", (req, res, next) => {
 
 // POST new order
 app.post("/api/orders", (req, res, next) => {
-
+    var order = {
+        orderType: req.body.orderType,
+        paymentType: req.body.paymentType,
+        taxPrice: req.body.taxPrice,
+        totalPrice: req.body.totalPrice,
+        isPaid: req.body.paymentType === "At counter" ? 0 : 1,
+        isReady: 0,
+        isProgress: 1,
+        isCanceled: 0,
+        isDelivered: 0,
+        createdAt: timestamp(),
+        updatedAt: timestamp()
+    };
+    // Insert new order to order table
+    let insert = 'INSERT INTO orders (orderType, paymentType, taxPrice, totalPrice, isPaid, isReady, isProgress, isCanceled, isDelivered, createdAt, updatedAt) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+    var params = [order.orderType, order.paymentType, order.taxPrice, order.totalPrice, order.isPaid, order.isReady, order.isProgress, order.isCanceled, order.isDelivered, order.createdAt, order.updatedAt];
+    db.run(insert, params, function (err, result) {
+        if (err){
+            res.status(400).json({"error": err.message})
+            return;
+        }  
+        res.json({
+            "message": "success",
+            "order": order,
+            "number" : this.lastID
+        })
+    });
+    // Record all items for the order
+    var orderItems = req.body.orderItems;
+    orderItems.forEach( item => {
+        let insertItem = 'INSERT INTO orderItems (itemID, quantity, orderID) VALUES (?,?,\
+                            (SELECT number FROM orders WHERE orderType = ? AND paymentType = ? AND totalPrice = ? AND createdAt = ?))';
+        var params = [item.id, item.quantity, order.orderType, order.paymentType, order.totalPrice, order.createdAt];
+        db.run(insertItem, params, function (err, result) {
+            if (err){
+                res.status(400).json({"error": err.message})
+                return;
+            }
+        })
+    });
+    
 });
 
 // UPDATE order status
