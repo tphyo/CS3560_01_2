@@ -128,7 +128,44 @@ app.post("/api/products", (req, res, next) => {
 
 // GET current orders
 app.get("/api/orders", (req, res, next) => {
+    var executeSql = (sql, params) => new Promise((resolve, reject) => {
+            db.all(sql, params, function (err, result) {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
 
+    executeSql("SELECT * FROM orders WHERE isDelivered = 0 AND isCanceled = 0", [])
+    .then(orders => 
+        Promise.all(orders.map(order => 
+            executeSql("SELECT * FROM orderItems\
+                        LEFT JOIN foodItems\
+                        ON orderItems.itemID = foodItems.id WHERE orderID = ?", [order.number])
+            .then(orderItems => 
+                ({  number: order.number, 
+                    orderType: order.orderType, 
+                    paymentType: order.paymentType,
+                    isPaid: order.isPaid,
+                    isReady: order.isReady,
+                    isProgress: order.isProgress,
+                    isCanceled: order.isCanceled,
+                    isDelivered: order.isDelivered,
+                    taxPrice: order.taxPrice,
+                    totalPrice: order.totalPrice,
+                    createdAt: order.createdAt,
+                    updatedAt: order.updatedAt,
+                    orderItems: orderItems.map(orderItem =>
+                        ({id: orderItem.itemId, 
+                          name: orderItem.name, 
+                          quantity: orderItem.quantity})
+                )})
+            )
+        ))
+    )
+    .then(hddt => res.send(hddt))
+    .catch(err => res.status(400).json({"error" : err.message}));
 });
 
 // POST new order
