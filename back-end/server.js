@@ -123,7 +123,30 @@ app.get("/api/products", (req, res, next) => {
 
 // POST a new Food Item
 app.post("/api/products", (req, res, next) => {
-
+    var data = {
+        name: req.body.name, 
+        image: req.body.image, 
+        price: req.body.price,
+        calories: req.body.calories, 
+        category: req.body.category, 
+        ingredient: req.body.ingredient, 
+        healthNotes: req.body.healthNotes, 
+        prepTime: req.body.prepTime, 
+        inStock: 1
+    }
+    let insert = 'INSERT INTO foodItems (name, image, price, calories, category, ingredient, healthNotes, prepTime, inStock) VALUES (?,?,?,?,?,?,?,?,?)';
+    var params = [data.name, data.image, data.price, data.calorie, data.category, data.ingredient, data.healthNotes, data.prepTime, data.inStock];
+    db.run(insert, params, function (err, result) {
+        if (err){
+            res.status(400).json({"error": err.message})
+            return;
+        }
+        res.json({
+            "message": "success",
+            "data": data,
+            "id" : this.lastID
+        })
+    });
 })
 
 // GET current orders
