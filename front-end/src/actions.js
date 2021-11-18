@@ -26,6 +26,7 @@ export const setOderType = (dispatch, orderType) => {
     });
 };
 
+// Get list of categories from the server
 export const listCategories = async (dispatch) => {
     dispatch({ type: CATEGORY_LIST_REQUEST });
     try {
@@ -42,6 +43,7 @@ export const listCategories = async (dispatch) => {
     }
 };
 
+// Get list of products from the server
 export const listProducts = async (dispatch, categoryName = '') => {
     dispatch({ type: PRODUCT_LIST_REQUEST });
     try {
@@ -58,6 +60,7 @@ export const listProducts = async (dispatch, categoryName = '') => {
     }
 };
 
+// Add an item to the order list
 export const addToOrder = async (dispatch, item) => {
     return dispatch({
         type: ORDER_ADD_ITEM,
@@ -65,6 +68,7 @@ export const addToOrder = async (dispatch, item) => {
     });
 }
 
+// Remove an item from the order
 export const removeFromOrder = async (dispatch, item) => {
     return dispatch({
         type: ORDER_REMOVE_ITEM,
@@ -72,12 +76,14 @@ export const removeFromOrder = async (dispatch, item) => {
     });
 }
 
+// Clear the order list
 export const clearOrder = async (dispatch) => {
     return dispatch({
         type: ORDER_CLEAR,
     });
 };
 
+// Set the payment type
 export const setPaymentType = async (dispatch, paymentType) => {
     return dispatch({
         type: ORDER_SET_PAYMENT_TYPE,
@@ -85,6 +91,8 @@ export const setPaymentType = async (dispatch, paymentType) => {
     });
 }
 
+
+// Create an order and send it to the server
 export const createOrder = async (dispatch, order) => {
     dispatch({ type: ORDER_CREATE_REQUEST });
     try {
@@ -104,6 +112,7 @@ export const createOrder = async (dispatch, order) => {
     }
 }
 
+// Get list of orders from the server
 export const listOrders = async (dispatch) => {
     dispatch({ type: SCREEN_SET_WIDTH })
     dispatch({ type: ORDER_LIST_REQUEST });

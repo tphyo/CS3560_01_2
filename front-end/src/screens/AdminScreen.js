@@ -16,6 +16,7 @@ export default function AdminScreen() {
     listOrders(dispatch);
   }, [dispatch]);
 
+  // Get orders from the server
   const setOrderStateHandler = async (order, action) => {
     try {
       await axios.put('/api/orders/' + order.number, {

@@ -2,8 +2,8 @@ const sqlite3 = require('sqlite3');
 const express = require("express");
 const data = require("./data");
 
-const app = express();
-app.use(express.urlencoded({ extends:true }));
+const app = express(); // Create express server
+app.use(express.urlencoded({ extends:true })); // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.json());
 
 // Root URI
@@ -11,11 +11,11 @@ app.get('/', (req, res) => {
     res.send('Hello to our back-end server.')
 });
 
-function isEmpty(str) {
+function isEmpty(str) { // Check if string is empty
     return (!str || str.length === 0 );
 }
 
-function timestamp() {
+function timestamp() { // Get current timestamp
     var date = new Date();
     return (date.getMonth()+1)+
           "/" + date.getDate()+
@@ -29,8 +29,9 @@ function timestamp() {
 const db = new sqlite3.Database('./kiosk.db', (err) => {
     if (err) { // If there's an error opening the database, display an error message
         console.error("Error opening database " + err.message);
-    } else { 
-        // else, create tables for foodItems, orders, orderItems if not existed
+    } else { // else, create tables for foodItems, orders, orderItems if not existed
+
+        // Create foodItems table
         db.run('CREATE TABLE IF NOT EXISTS foodItems( \
             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\
             name NVARCHAR(50) NOT NULL,\
@@ -48,6 +49,7 @@ const db = new sqlite3.Database('./kiosk.db', (err) => {
             }
         });
 
+        // Create table orders
         db.run('CREATE TABLE IF NOT EXISTS orders( \
             number INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\
             orderType NVARCHAR(10) NOT NULL,\
@@ -67,6 +69,7 @@ const db = new sqlite3.Database('./kiosk.db', (err) => {
             }
         });
 
+        // Create table orderItems
         db.run('CREATE TABLE IF NOT EXISTS orderItems( \
             orderID INTEGER NOT NULL,\
             itemID INTEGER NOT NULL,\
@@ -90,7 +93,7 @@ app.get('/api/categories', (req, res)=> {
 // Seed foodItems from data.js
 app.post("/api/products/seed", (req, res, next) => {
     let insert = 'INSERT INTO foodItems (name, image, price, calories, category, ingredient, healthNotes, prepTime, inStock) VALUES (?,?,?,?,?,?,?,?,?)';
-    data.products.forEach(
+    data.products.forEach( // For each product in data.js
         item => {
             db.run(insert, [item.name, item.image, item.price, item.calorie, item.category, item.ingredient, item.healthNotes, item.prepTime, item.inStock]);
         }
@@ -103,7 +106,7 @@ app.post("/api/products/seed", (req, res, next) => {
 // GET all foodItems or by category
 app.get("/api/products", (req, res, next) => {
     const params = req.query;
-    if (!isEmpty(params.category)) // by category
+    if (!isEmpty(params.category)) // get foodItems by category
         db.all(`SELECT * FROM foodItems where category=?`, [params.category], (err, rows) => {
             if (err) {
             res.status(400).json({"error":err.message});
@@ -123,7 +126,7 @@ app.get("/api/products", (req, res, next) => {
 
 // POST a new Food Item
 app.post("/api/products", (req, res, next) => {
-    var data = {
+    var data = { // Create a new object from the request body
         name: req.body.name, 
         image: req.body.image, 
         price: req.body.price,
@@ -151,7 +154,7 @@ app.post("/api/products", (req, res, next) => {
 
 // GET current orders
 app.get("/api/orders", (req, res, next) => {
-    var executeSql = (sql, params) => new Promise((resolve, reject) => {
+    var executeSql = (sql, params) => new Promise((resolve, reject) => { // Callback function
             db.all(sql, params, function (err, result) {
                 if (err) {
                     return reject(err);
@@ -160,12 +163,12 @@ app.get("/api/orders", (req, res, next) => {
             });
         });
 
-    executeSql("SELECT * FROM orders WHERE isDelivered = 0 AND isCanceled = 0", [])
+    executeSql("SELECT * FROM orders WHERE isDelivered = 0 AND isCanceled = 0", []) // Get all orders that are not delivered and not canceled
     .then(orders => 
         Promise.all(orders.map(order => 
             executeSql("SELECT * FROM orderItems\
                         LEFT JOIN foodItems\
-                        ON orderItems.itemID = foodItems.id WHERE orderID = ?", [order.number])
+                        ON orderItems.itemID = foodItems.id WHERE orderID = ?", [order.number]) // Get all orderItems of each order
             .then(orderItems => 
                 ({  number: order.number, 
                     orderType: order.orderType, 
@@ -193,7 +196,7 @@ app.get("/api/orders", (req, res, next) => {
 
 // POST new order
 app.post("/api/orders", (req, res, next) => {
-    var order = {
+    var order = { // Create a new object from the request body
         orderType: req.body.orderType,
         paymentType: req.body.paymentType,
         taxPrice: req.body.taxPrice,
@@ -239,8 +242,8 @@ app.post("/api/orders", (req, res, next) => {
 // UPDATE order status
 app.put("/api/orders/:id", (req, res, next) => {
     var currentTime = timestamp();
-    var action = req.body.action;
-    if (action === "ready") {
+    var action = req.body.action; // Get action from request body
+    if (action === "ready") { // Update order status to ready
         let update = 'UPDATE orders SET isReady = 1, isProgress = 0, updatedAt = ? WHERE number = ?';
         db.run(update, [currentTime, req.params.id], function(err, result) {
             if (err){
@@ -253,7 +256,7 @@ app.put("/api/orders/:id", (req, res, next) => {
                 "orderNumber": req.params.id
             })
         });
-    } else if (action === "deliver") {
+    } else if (action === "deliver") { // Update order status to delivered
         let update = 'UPDATE orders SET isDelivered = 1, isPaid = 1, isProgress = 0, updatedAt = ? WHERE number = ?';
         db.run(update, [currentTime, req.params.id], function(err, result) {
             if (err){
@@ -266,7 +269,7 @@ app.put("/api/orders/:id", (req, res, next) => {
                 "orderNumber": req.params.id
             })
         });
-    } else if (action === "cancel"){
+    } else if (action === "cancel"){ // Update order status to canceled
         let update = 'UPDATE orders SET isCanceled = 1, isProgress = 0, updatedAt = ? WHERE number = ?';
         db.run(update, [currentTime, req.params.id], function(err, result) {
             if (err){
